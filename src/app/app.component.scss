@@ -1,0 +1,130 @@
+:host {
+	display: block;
+	min-height: 100vh;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background: linear-gradient(145deg, #f3f6fb 0%, #e5edf8 100%);
+	color: #102030;
+}
+
+.chat-shell {
+	min-height: 100vh;
+	display: grid;
+	place-items: center;
+	padding: 1.25rem;
+}
+
+.chat-card {
+	width: min(100%, 780px);
+	background: #ffffff;
+	border: 1px solid #d7e1ef;
+	border-radius: 16px;
+	box-shadow: 0 20px 40px -24px rgba(16, 32, 48, 0.4);
+	overflow: hidden;
+}
+
+.chat-header {
+	padding: 1rem 1.25rem;
+	border-bottom: 1px solid #e4ebf5;
+}
+
+.chat-header h1 {
+	margin: 0;
+	font-size: 1.3rem;
+}
+
+.chat-header p {
+	margin: 0.4rem 0 0;
+	font-size: 0.9rem;
+	color: #455a70;
+}
+
+.messages {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	padding: 1rem 1.25rem;
+	max-height: 52vh;
+	overflow: auto;
+	background: #f9fbfe;
+}
+
+.message {
+	max-width: 90%;
+	border-radius: 12px;
+	padding: 0.65rem 0.8rem;
+}
+
+.message .role {
+	display: block;
+	font-size: 0.75rem;
+	font-weight: 700;
+	margin-bottom: 0.2rem;
+	text-transform: uppercase;
+}
+
+.message pre {
+	margin: 0;
+	white-space: pre-wrap;
+	word-break: break-word;
+	font-family: inherit;
+	font-size: 0.95rem;
+}
+
+.message.user {
+	margin-left: auto;
+	background: #1f6ed4;
+	color: #ffffff;
+}
+
+.message.assistant {
+	margin-right: auto;
+	background: #e6eefb;
+	color: #102030;
+}
+
+.message.pending {
+	opacity: 0.8;
+}
+
+.chat-form {
+	display: grid;
+	gap: 0.55rem;
+	padding: 1rem 1.25rem 1.25rem;
+	border-top: 1px solid #e4ebf5;
+}
+
+.chat-form label {
+	font-size: 0.82rem;
+	color: #425569;
+	font-weight: 600;
+}
+
+.chat-form input,
+.chat-form textarea {
+	border: 1px solid #c8d7ea;
+	border-radius: 10px;
+	padding: 0.7rem 0.8rem;
+	font: inherit;
+	color: #102030;
+	background: #fff;
+}
+
+.chat-form textarea {
+	resize: vertical;
+}
+
+.chat-form button {
+	margin-top: 0.3rem;
+	border: 0;
+	border-radius: 10px;
+	background: #0f5cbc;
+	color: #fff;
+	font-weight: 700;
+	padding: 0.8rem 1rem;
+	cursor: pointer;
+}
+
+.chat-form button:disabled {
+	background: #8aa3c4;
+	cursor: not-allowed;
+}

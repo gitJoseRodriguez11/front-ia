@@ -1,0 +1,49 @@
+<main class="chat-shell">
+  <section class="chat-card">
+    <header class="chat-header">
+      <h1>Chat IA</h1>
+      <p>Conectado a <strong>POST /api/ai/queryWithDataV2</strong></p>
+    </header>
+
+    <section class="messages" aria-live="polite">
+      @for (message of messages; track trackByIndex($index)) {
+        <article class="message" [class.user]="message.role === 'user'" [class.assistant]="message.role === 'assistant'">
+          <span class="role">{{ message.role === 'user' ? 'Tu' : 'IA' }}</span>
+          <pre>{{ message.text }}</pre>
+        </article>
+      }
+
+      @if (isLoading) {
+        <article class="message assistant pending">
+          <span class="role">IA</span>
+          <pre>Consultando servicio...</pre>
+        </article>
+      }
+    </section>
+
+    <form class="chat-form" (ngSubmit)="send()">
+      <label for="sessionId">Session ID</label>
+      <input
+        id="sessionId"
+        name="sessionId"
+        [(ngModel)]="sessionId"
+        placeholder="sssss"
+        required
+      />
+
+      <label for="prompt">Mensaje</label>
+      <textarea
+        id="prompt"
+        name="prompt"
+        [(ngModel)]="prompt"
+        rows="3"
+        placeholder="Escribe tu consulta..."
+        required
+      ></textarea>
+
+      <button type="submit" [disabled]="isLoading || !prompt.trim() || !sessionId.trim()">
+        {{ isLoading ? 'Enviando...' : 'Enviar' }}
+      </button>
+    </form>
+  </section>
+</main>
