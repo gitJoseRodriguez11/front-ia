@@ -28,7 +28,7 @@ export class AppComponent implements AfterViewChecked {
   messages: ChatMessage[] = [
     {
       role: 'assistant',
-      text: 'Hola, escribe tu consulta y la enviaré al servicio /queryWithDataV2.'
+      text: '🤖 ¡Hola! Soy MIA, tu compañera digital. Estoy lista para conversar contigo y ayudarte en lo que necesites. Cuéntame, ¿qué te gustaría preguntar?'
     }
   ];
 
