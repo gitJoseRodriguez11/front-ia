@@ -5,7 +5,15 @@
         <h1>MIA <p>by TISAL</p></h1>
         <p><strong>Impulsamos Tecnologías para una salud que funciona, evoluciona y te cuida.</strong></p>
       </div>
-      <span class="session-pill">Sesion activa</span>
+      <div class="header-right">
+        <span class="session-pill">Sesion activa</span>
+        <img
+          class="brand-logo"
+          src="https://media.licdn.com/dms/image/v2/D4E0BAQH2XshtZ7Ip9A/company-logo_200_200/B4EZpPW31TIQAM-/0/1762267987943/tisal_spa_logo?e=2147483647&v=beta&t=-93I_v5GiXLtfxIcmW_iDFqyCboKR_Pz1p5oz8q-V0k"
+          alt="Logo Tisal"
+          loading="lazy"
+        />
+      </div>
     </header>
 
     <section #messagesContainer class="messages" aria-live="polite">
@@ -25,14 +33,6 @@
     </section>
 
     <form class="chat-form" (ngSubmit)="send()">
-      <div class="form-brand" aria-hidden="true">
-        <img
-          src="https://media.licdn.com/dms/image/v2/D4E0BAQH2XshtZ7Ip9A/company-logo_200_200/B4EZpPW31TIQAM-/0/1762267987943/tisal_spa_logo?e=2147483647&v=beta&t=-93I_v5GiXLtfxIcmW_iDFqyCboKR_Pz1p5oz8q-V0k"
-          alt="Logo Tisal"
-          loading="lazy"
-        />
-      </div>
-
       <label for="prompt">Mensaje</label>
       <textarea
         id="prompt"
@@ -41,6 +41,7 @@
         rows="3"
         placeholder="Escribe tu consulta..."
         required
+        (keydown.enter)="$event.preventDefault(); send()"
       ></textarea>
 
       <button type="submit" [disabled]="isLoading || !prompt.trim()">
