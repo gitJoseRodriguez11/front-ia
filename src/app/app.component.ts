@@ -30,36 +30,39 @@ export class AppComponent {
 
   constructor(private readonly aiChatService: AiChatService) {}
 
-  send(): void {
-    const cleanedPrompt = this.prompt.trim();
-    const cleanedSessionId = this.sessionId.trim();
+ send(): void {
+  const cleanedPrompt = this.prompt.trim();
+  const cleanedSessionId = this.sessionId.trim();
 
-    if (!cleanedPrompt || !cleanedSessionId || this.isLoading) {
-      return;
-    }
-
-    this.messages.push({ role: 'user', text: cleanedPrompt });
-    this.isLoading = true;
-
-    this.aiChatService
-      .sendMessage({ prompt: cleanedPrompt, sessionId: cleanedSessionId })
-      .pipe(finalize(() => (this.isLoading = false)))
-      .subscribe({
-        next: (response) => {
-          this.messages.push({
-            role: 'assistant',
-            text: this.extractText(response)
-          });
-          this.prompt = '';
-        },
-        error: () => {
-          this.messages.push({
-            role: 'assistant',
-            text: 'No se pudo conectar con el servicio. Revisa que el backend este activo en http://localhost:5000.'
-          });
-        }
-      });
+  if (!cleanedPrompt || !cleanedSessionId || this.isLoading) {
+    return;
   }
+
+  this.messages.push({ role: 'user', text: cleanedPrompt });
+  this.isLoading = true;
+
+  this.aiChatService
+    .sendMessage({ prompt: cleanedPrompt, sessionId: cleanedSessionId })
+    .pipe(finalize(() => (this.isLoading = false)))
+    .subscribe({
+      next: (response: string) => {
+        // Como el backend devuelve texto plano, lo usamos directamente
+        this.messages.push({
+          role: 'assistant',
+          text: response
+        });
+        this.prompt = '';
+      },
+      error: (err) => {
+        console.error('Error en la llamada:', err);
+        this.messages.push({
+          role: 'assistant',
+          text: 'No se pudo conectar con el servicio. Revisa que el backend esté activo en http://localhost:5000.'
+        });
+      }
+    });
+}
+
 
   trackByIndex(index: number): number {
     return index;

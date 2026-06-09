@@ -1,21 +1,21 @@
 <main class="chat-shell">
   <section class="chat-card">
     <header class="chat-header">
-      <h1>Chat IA</h1>
+      <h1>Chat MIA</h1>
       <p>Conectado a <strong>POST /api/ai/queryWithDataV2</strong></p>
     </header>
 
     <section class="messages" aria-live="polite">
       @for (message of messages; track trackByIndex($index)) {
         <article class="message" [class.user]="message.role === 'user'" [class.assistant]="message.role === 'assistant'">
-          <span class="role">{{ message.role === 'user' ? 'Tu' : 'IA' }}</span>
+          <span class="role">{{ message.role === 'user' ? 'Tu' : 'MIA' }}</span>
           <pre>{{ message.text }}</pre>
         </article>
       }
 
       @if (isLoading) {
         <article class="message assistant pending">
-          <span class="role">IA</span>
+          <span class="role">MIA</span>
           <pre>Consultando servicio...</pre>
         </article>
       }

@@ -15,7 +15,7 @@ export class AiChatService {
 
   constructor(private readonly http: HttpClient) {}
 
-  sendMessage(payload: ChatRequest): Observable<unknown> {
-    return this.http.post<unknown>(this.apiUrl, payload);
+  sendMessage(payload: ChatRequest): Observable<string> {
+    return this.http.post(this.apiUrl, payload, { responseType: 'text' });
   }
 }
