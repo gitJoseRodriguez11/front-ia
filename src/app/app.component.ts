@@ -17,8 +17,8 @@ interface ChatMessage {
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements AfterViewChecked {
-  prompt = 'cuales son los servicios de la sucursal de viña';
-  readonly sessionId = this.generateSessionId();
+  prompt = 'Necesito agendar una hora';
+  sessionId = this.generateSessionId();
   isLoading = false;
   private shouldScrollToBottom = false;
 
@@ -70,6 +70,9 @@ export class AppComponent implements AfterViewChecked {
             role: 'assistant',
             text: response
           });
+          if (this.isAppointmentBooked(response)) {
+            this.sessionId = this.generateSessionId();
+          }
           this.requestScrollToBottom();
         },
         error: (err) => {
@@ -112,6 +115,16 @@ export class AppComponent implements AfterViewChecked {
 
   private requestScrollToBottom(): void {
     this.shouldScrollToBottom = true;
+  }
+
+  private isAppointmentBooked(response: string): boolean {
+    const lower = response.toLowerCase();
+    return lower.includes('cita agendada exitosamente') ||
+           lower.includes('cita fue agendada exitosamente') ||
+           lower.includes('su cita ha sido agendada') ||
+           lower.includes('tu cita ha sido agendada') ||
+           lower.includes('cita confirmada') ||
+           lower.includes('agendamiento exitoso');
   }
 
   private generateSessionId(): string {
