@@ -1,11 +1,14 @@
 <main class="chat-shell">
   <section class="chat-card">
     <header class="chat-header">
-      <h1>Chat MIA</h1>
-      <p>Conectado a <strong>POST /api/ai/queryWithDataV2</strong></p>
+      <div>
+        <h1>Chat MIA</h1>
+        <p>Conectado a <strong>POST /api/ai/queryWithDataV2</strong></p>
+      </div>
+      <span class="session-pill">Sesion activa</span>
     </header>
 
-    <section class="messages" aria-live="polite">
+    <section #messagesContainer class="messages" aria-live="polite">
       @for (message of messages; track trackByIndex($index)) {
         <article class="message" [class.user]="message.role === 'user'" [class.assistant]="message.role === 'assistant'">
           <span class="role">{{ message.role === 'user' ? 'Tu' : 'MIA' }}</span>
@@ -22,15 +25,6 @@
     </section>
 
     <form class="chat-form" (ngSubmit)="send()">
-      <label for="sessionId">Session ID</label>
-      <input
-        id="sessionId"
-        name="sessionId"
-        [(ngModel)]="sessionId"
-        placeholder="sssss"
-        required
-      />
-
       <label for="prompt">Mensaje</label>
       <textarea
         id="prompt"
@@ -41,7 +35,7 @@
         required
       ></textarea>
 
-      <button type="submit" [disabled]="isLoading || !prompt.trim() || !sessionId.trim()">
+      <button type="submit" [disabled]="isLoading || !prompt.trim()">
         {{ isLoading ? 'Enviando...' : 'Enviar' }}
       </button>
     </form>

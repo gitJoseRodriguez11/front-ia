@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { AiChatService } from './ai-chat.service';
@@ -16,10 +16,14 @@ interface ChatMessage {
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements AfterViewChecked {
   prompt = 'cuales son los servicios de la sucursal de viña';
-  sessionId = 'sssss';
+  readonly sessionId = this.generateSessionId();
   isLoading = false;
+  private shouldScrollToBottom = false;
+
+  @ViewChild('messagesContainer')
+  private messagesContainer?: ElementRef<HTMLElement>;
 
   messages: ChatMessage[] = [
     {
@@ -30,38 +34,54 @@ export class AppComponent {
 
   constructor(private readonly aiChatService: AiChatService) {}
 
- send(): void {
-  const cleanedPrompt = this.prompt.trim();
-  const cleanedSessionId = this.sessionId.trim();
+  ngAfterViewChecked(): void {
+    if (!this.shouldScrollToBottom) {
+      return;
+    }
 
-  if (!cleanedPrompt || !cleanedSessionId || this.isLoading) {
-    return;
+    const container = this.messagesContainer?.nativeElement;
+
+    if (!container) {
+      return;
+    }
+
+    container.scrollTop = container.scrollHeight;
+    this.shouldScrollToBottom = false;
   }
 
-  this.messages.push({ role: 'user', text: cleanedPrompt });
-  this.isLoading = true;
+  send(): void {
+    const cleanedPrompt = this.prompt.trim();
 
-  this.aiChatService
-    .sendMessage({ prompt: cleanedPrompt, sessionId: cleanedSessionId })
-    .pipe(finalize(() => (this.isLoading = false)))
-    .subscribe({
-      next: (response: string) => {
-        // Como el backend devuelve texto plano, lo usamos directamente
-        this.messages.push({
-          role: 'assistant',
-          text: response
-        });
-        this.prompt = '';
-      },
-      error: (err) => {
-        console.error('Error en la llamada:', err);
-        this.messages.push({
-          role: 'assistant',
-          text: 'No se pudo conectar con el servicio. Revisa que el backend esté activo en http://localhost:5000.'
-        });
-      }
-    });
-}
+    if (!cleanedPrompt || this.isLoading) {
+      return;
+    }
+
+    this.messages.push({ role: 'user', text: cleanedPrompt });
+    this.prompt = '';
+    this.isLoading = true;
+    this.requestScrollToBottom();
+
+    this.aiChatService
+      .sendMessage({ prompt: cleanedPrompt, sessionId: this.sessionId })
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe({
+        next: (response: string) => {
+          this.messages.push({
+            role: 'assistant',
+            text: response
+          });
+          this.requestScrollToBottom();
+        },
+        error: (err) => {
+          console.error('Error en la llamada:', err);
+          this.messages.push({
+            role: 'assistant',
+            text: 'No se pudo conectar con el servicio. Revisa que el backend esté activo en http://localhost:5000.'
+          });
+          this.requestScrollToBottom();
+        }
+      });
+  }
 
 
   trackByIndex(index: number): number {
@@ -88,5 +108,17 @@ export class AppComponent {
     }
 
     return String(response);
+  }
+
+  private requestScrollToBottom(): void {
+    this.shouldScrollToBottom = true;
+  }
+
+  private generateSessionId(): string {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+
+    return `session-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   }
 }
