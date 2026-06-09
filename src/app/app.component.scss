@@ -112,6 +112,22 @@
 	border-top: 1px solid #e4ebf5;
 }
 
+.form-brand {
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: 0.2rem;
+}
+
+.form-brand img {
+	width: 44px;
+	height: 44px;
+	object-fit: contain;
+	border-radius: 8px;
+	border: 1px solid #d7e1ef;
+	background: #ffffff;
+	padding: 0.2rem;
+}
+
 .chat-form label {
 	font-size: 0.76rem;
 	color: #425569;
@@ -163,5 +179,10 @@
 
 	.message {
 		max-width: 94%;
+	}
+
+	.form-brand img {
+		width: 40px;
+		height: 40px;
 	}
 }
